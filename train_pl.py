@@ -12,13 +12,14 @@ def main():
     cfg = get_cfg_defaults()
 
     if cfg.SOLVER.NET == 'UNet':
-        log_dir = '.\checkpoints_UNet'
+        log_dir = '.\checkpoints\checkpoints_UNet'
 
     elif cfg.SOLVER.NET == 'UNetpp':
-        log_dir = '.\checkpoints_UNetpp'
+        log_dir = '.\checkpoints\checkpoints_UNetpp'
 
     elif cfg.SOLVER.NET == 'ResUNetpp':
-        log_dir = '.\checkpoints_ResUNetpp'
+        log_dir = '.\checkpoints\checkpoints_ResUNetpp'
+
 
     model = SemSegment(n_channels=cfg.SOLVER.N_CHANNELS,
                        n_classes=cfg.SOLVER.N_CLASSES,

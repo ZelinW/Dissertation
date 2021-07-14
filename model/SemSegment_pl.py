@@ -4,9 +4,9 @@ import torch.nn as nn
 from torch.utils.data import DataLoader, random_split
 
 from ACDC_data import get_data_dir, PrepareACDC
-from ResUNetpp import ResNestedUNet
-from UNet_pl import UNet
-from Unetpp_pl import NestedUNet
+from model.ResUNetpp import ResNestedUNet
+from model.UNet_pl import UNet
+from model.Unetpp_pl import NestedUNet
 from config import get_cfg_defaults
 
 
