@@ -3,8 +3,8 @@ import torch
 from ACDC_data import get_data_dir, PrepareACDC
 from config import get_cfg_defaults
 from train_model import train_net
-import Unetpp_pl
-import UNet_pl
+from model import Unetpp_pl
+from model import UNet_pl
 
 
 def main():
