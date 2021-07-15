@@ -15,7 +15,10 @@ def main():
         log_dir = '.\checkpoints\checkpoints_UNet'
 
     elif cfg.SOLVER.NET == 'UNetpp':
-        log_dir = '.\checkpoints\checkpoints_UNetpp'
+        if cfg.SOLVER.DEEPSUPERVISION:
+            log_dir = '.\checkpoints\checkpoints_UNetpp_DS'
+        else:
+            log_dir = '.\checkpoints\checkpoints_UNetpp'
 
     elif cfg.SOLVER.NET == 'ResUNetpp':
         log_dir = '.\checkpoints\checkpoints_ResUNetpp'

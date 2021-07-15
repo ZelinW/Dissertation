@@ -53,13 +53,13 @@ class NestedUNet(pl.LightningModule):
 
         self.conv0_4 = DoubleConv(nb_filter[0] * 4 + nb_filter[1], nb_filter[0])
 
-        # if self.deepsupervision:
-        self.final1 = nn.Conv2d(nb_filter[0], self.n_classes, kernel_size=1)
-        self.final2 = nn.Conv2d(nb_filter[0], self.n_classes, kernel_size=1)
-        self.final3 = nn.Conv2d(nb_filter[0], self.n_classes, kernel_size=1)
-        self.final4 = nn.Conv2d(nb_filter[0], self.n_classes, kernel_size=1)
-        # else:
-        self.final = nn.Conv2d(nb_filter[0], self.n_classes, kernel_size=1)
+        if self.deepsupervision:
+            self.final1 = nn.Conv2d(nb_filter[0], self.n_classes, kernel_size=1)
+            self.final2 = nn.Conv2d(nb_filter[0], self.n_classes, kernel_size=1)
+            self.final3 = nn.Conv2d(nb_filter[0], self.n_classes, kernel_size=1)
+            self.final4 = nn.Conv2d(nb_filter[0], self.n_classes, kernel_size=1)
+        else:
+            self.final = nn.Conv2d(nb_filter[0], self.n_classes, kernel_size=1)
 
     def forward(self, input):
         x0_0 = self.conv0_0(input)
