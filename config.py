@@ -23,7 +23,7 @@ _C.SOLVER.N_CLASSES = 4
 _C.SOLVER.MAX_EPOCHS = 2000
 _C.SOLVER.PATIENCE = 2000
 
-_C.SOLVER.DEEPSUPERVISION = False  # Set True while need pruning in test
+_C.SOLVER.DEEPSUPERVISION = True  # Set True while need pruning in test
 
 
 def get_cfg_defaults():
