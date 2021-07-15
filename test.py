@@ -3,7 +3,7 @@ import numpy as np
 import torch
 
 from ACDC_data import load_nii, crop_image, rescale_intensity, data_augmenter, onehot2mask
-from SemSegment_pl import SemSegment
+from model.SemSegment_pl import SemSegment
 from config import get_cfg_defaults
 
 
