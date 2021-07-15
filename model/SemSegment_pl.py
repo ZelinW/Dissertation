@@ -4,10 +4,10 @@ import torch.nn as nn
 from torch.utils.data import DataLoader, random_split
 
 from ACDC_data import get_data_dir, PrepareACDC
+from config import get_cfg_defaults
 from model.ResUNetpp import ResNestedUNet
 from model.UNet_pl import UNet
 from model.Unetpp_pl import NestedUNet
-from config import get_cfg_defaults
 
 
 def diceCoeff(pred, gt, smooth=1):
@@ -49,7 +49,8 @@ class SemSegment(pl.LightningModule):
         if self.cfg.SOLVER.NET == 'UNet':
             self.net = UNet(n_channels=self.n_channels, n_classes=self.n_classes)
         elif self.cfg.SOLVER.NET == 'UNetpp':
-            self.net = NestedUNet(n_channels=self.n_channels, n_classes=self.n_classes)
+            self.net = NestedUNet(n_channels=self.n_channels, n_classes=self.n_classes,
+                                  deepsupervision=self.cfg.SOLVER.DEEPSUPERVISION)
         elif self.cfg.SOLVER.NET == 'ResUNetpp':
             self.net = ResNestedUNet(n_channels=self.n_channels, n_classes=self.n_classes)
 
@@ -63,9 +64,18 @@ class SemSegment(pl.LightningModule):
         y_hat = self.forward(x)
         y = y.to(dtype=torch.float32)
         lf = nn.BCEWithLogitsLoss()
-        loss = lf(y_hat, y)
         dl = DiceLoss(num_classes=self.n_classes)
-        dice_loss = dl(y_hat, y)
+        if self.cfg.SOLVER.DEEPSUPERVISION:
+            loss, dice_loss = 0, 0
+            for mask in y_hat:
+                loss += dl(mask, y)
+                dice_loss += dl(mask, y)
+            loss /= len(y_hat)
+            dice_loss /= len(y_hat)
+        else:
+            loss = lf(y_hat, y)
+            dice_loss = dl(y_hat, y)
+
         self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
         self.log('train_DiceLoss', dice_loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
         return dice_loss
@@ -75,7 +85,14 @@ class SemSegment(pl.LightningModule):
         y_hat = self.forward(x)
         y = y.to(dtype=torch.float32)
         lf = nn.BCEWithLogitsLoss()
-        loss = lf(y_hat, y)
+        if self.cfg.SOLVER.DEEPSUPERVISION:
+            loss, dice_loss = 0, 0
+            for mask in y_hat:
+                loss += lf(mask, y)
+            loss /= len(y_hat)
+            dice_loss /= len(y_hat)
+        else:
+            loss = lf(y_hat, y)
         self.log('val_loss', loss, on_step=False, on_epoch=True, prog_bar=True)
         return loss
 

@@ -1,0 +1,7 @@
+.idea/
+__pycache__/
+ACDC_data/
+checkpoints/
+kale/
+venv/
+lightning_logs/
